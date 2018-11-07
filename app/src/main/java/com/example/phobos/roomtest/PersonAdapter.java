@@ -6,7 +6,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -15,14 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonViewHolder>{
     private List<Person> people;
     private OnItemClickListener itemClickListener;
-
-    public static PersonAdapter createAdapter(OnItemClickListener itemClickListener){
-        List<Person> people = new ArrayList<>(3);
-        people.add(new Person(1,"Luke", "", "Tatooine", 77));
-        people.add(new Person(2, "Leia", "", "Alderaan", 49));
-        people.add(new Person(3, "Obi-Wan", "", "Stewjon", 77));
-        return new PersonAdapter(people, itemClickListener);
-    }
 
     public PersonAdapter(List<Person> people, OnItemClickListener itemClickListener) {
         this.people = people;
@@ -79,7 +72,12 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.PersonView
         public void bind(final Person person, final OnItemClickListener itemClickListener){
             itemView.setOnClickListener(v -> itemClickListener.onItemClick(person));
 
-            ivAvatar.setImageResource(R.drawable.ic_launcher_foreground);
+            Picasso.get().load(person.getAvatar())
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_launcher_background)
+                    .fit()
+                    .centerCrop()
+                    .into(ivAvatar);
             tvName.setText(person.getName());
             tvPlanet.setText(person.getPlanet());
             tvMass.setText(String.valueOf(person.getMass()));

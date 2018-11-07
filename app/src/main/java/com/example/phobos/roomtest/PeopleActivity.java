@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity {
+public class PeopleActivity extends AppCompatActivity {
 
     private PersonAdapter adapter;
+    private PersonGenerator generator = new PersonGenerator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            final Person person = new Person("Luke", "", "Tatooin", 77);
-            PersonDao personDao = AppDatabase.getInstance(this).personDao();
-            personDao.insertPerson(person);
+            final PersonDao personDao = AppDatabase.getInstance(this).personDao();
+            personDao.insertPerson(generator.getPerson());
             List<Person> people = personDao.getAll();
             adapter.update(people);
         });

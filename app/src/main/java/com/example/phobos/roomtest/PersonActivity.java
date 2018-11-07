@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class PersonActivity extends AppCompatActivity {
 
-    public static final String EXTRA_PERSON_ID = "com.example.phobos.roomtest.extras.EXTRA_PERSON_ID";
+    private static final String EXTRA_PERSON_ID = "com.example.phobos.roomtest.extras.EXTRA_PERSON_ID";
 
     public static Intent getStartIntent(Context context, long personId){
         return new Intent(context, PersonActivity.class).putExtra(EXTRA_PERSON_ID, personId);
@@ -31,7 +33,12 @@ public class PersonActivity extends AppCompatActivity {
 
         final long personId = getIntent().getLongExtra(EXTRA_PERSON_ID, 0);
         final Person person = AppDatabase.getInstance(this).personDao().getById(personId);
-        ivAvatar.setImageResource(R.drawable.ic_launcher_foreground);
+        Picasso.get().load(person.getAvatar())
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)
+                .fit()
+                .centerCrop()
+                .into(ivAvatar);
         tvName.setText(person.getName());
         tvPlanet.setText(person.getPlanet());
         tvMass.setText(String.valueOf(person.getMass()));
