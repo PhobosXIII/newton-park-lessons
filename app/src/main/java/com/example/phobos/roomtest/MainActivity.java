@@ -1,16 +1,17 @@
 package com.example.phobos.roomtest;
 
+import android.content.Intent;
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
         rvPersons.setLayoutManager(new LinearLayoutManager(this));
         rvPersons.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         List<Person> people = AppDatabase.getInstance(this).personDao().getAll();
-        adapter = new PersonAdapter(people, item -> Snackbar.make(rvPersons, String.valueOf(item.getId()), Snackbar.LENGTH_LONG).show());
+        adapter = new PersonAdapter(people, person -> {
+            final Intent intent = PersonActivity.getStartIntent(this, person.getId());
+            startActivity(intent);
+        });
         rvPersons.setAdapter(adapter);
     }
 }

@@ -12,7 +12,7 @@ public interface PersonDao {
     List<Person> getAll();
 
     @Query("SELECT * FROM people WHERE id = :id")
-    Person getById(int id);
+    Person getById(long id);
 
     @Insert
     long insertPerson(Person person);
